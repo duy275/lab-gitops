@@ -24,6 +24,7 @@ spec:
             existingSecret: jenkins-admin
             userKey: jenkins-admin-user
             passwordKey: jenkins-admin-password
+          initializeOnce: true   # plugin đã có trên PVC thì restart không tải lại
         persistence:
           size: 8Gi                        # local-path, nằm trên worker
   destination:
