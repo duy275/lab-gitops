@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jenkins.io   # Helm repo, không phải git
+    chart: jenkins                        # có "chart" thì không dùng "path"
+    targetRevision: 5.12.0                # pin cứng, đừng dùng *
+    helm:
+      valuesObject:                       # values inline, giống values.yaml
+        controller:
+          jenkinsUrl: https://jenkins.hoanqdy.cloud
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hostName: jenkins.hoanqdy.cloud
+          resources:
+            requests: {cpu: 500m, memory: 1Gi}
+            limits:   {memory: 2Gi}
+        persistence:
+          size: 8Gi                        # local-path, nằm trên worker
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jenkins
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions: [CreateNamespace=true]
