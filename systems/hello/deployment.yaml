@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: hello}        # Deployment quản lý pod có label này
+  template:
+    metadata:
+      labels: {app: hello}
+    spec:
+      containers:
+        - name: hello
+          image: ghcr.io/duy275/hello:11a68d1   # tag = SHA; sau này Jenkins sẽ tự sửa dòng này
+          ports:
+            - containerPort: 8080
+          readinessProbe:                       # sẵn sàng nhận traffic chưa
+            httpGet: {path: /actuator/health, port: 8080}
+            initialDelaySeconds: 10
+          livenessProbe:                        # còn sống không, chết thì restart
+            httpGet: {path: /actuator/health, port: 8080}
+            initialDelaySeconds: 30
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {memory: 512Mi}
