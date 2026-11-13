@@ -20,6 +20,10 @@ spec:
           resources:
             requests: {cpu: 500m, memory: 1Gi}
             limits:   {memory: 2Gi}
+          admin:
+            existingSecret: jenkins-admin
+            userKey: jenkins-admin-user
+            passwordKey: jenkins-admin-password
         persistence:
           size: 8Gi                        # local-path, nằm trên worker
   destination:
