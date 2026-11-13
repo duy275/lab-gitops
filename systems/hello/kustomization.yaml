@@ -4,4 +4,4 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/duy275/hello
-    newTag: 11a68d1          # ← sau này Jenkins chỉ sửa đúng dòng này
+    newTag: 3cdf685
