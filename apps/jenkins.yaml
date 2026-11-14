@@ -46,7 +46,7 @@ spec:
                             repoOwner('duy275')
                             credentialsId('github')
                             traits {
-                              sourceWildcardFilter { includes('lab-app-*'); excludes('') }
+                              sourceWildcardFilter { includes('lab-app-* lab-backstage'); excludes('') }
                               gitHubBranchDiscovery { strategyId(1) }
                             }
                           }
