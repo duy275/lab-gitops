@@ -12,6 +12,12 @@ spec:
     helm:
       valuesObject:                       # values inline, giống values.yaml
         controller:
+          additionalPlugins:
+            - github-branch-source:latest   # Org Folder quét GitHub, nhận webhook, báo commit xanh/đỏ
+            - job-dsl:latest                # để khai báo job/folder bằng code trong JCasC
+          additionalExistingSecrets:
+            - name: github-token            # Secret mày tạo hôm qua ở ns jenkins
+              keyName: token                # → trong JCasC dùng được ${github-token-token}
           jenkinsUrl: https://jenkins.hoanqdy.cloud
           ingress:
             enabled: true
