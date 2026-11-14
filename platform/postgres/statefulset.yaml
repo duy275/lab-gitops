@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet              # có ổ đĩa riêng, tên pod cố định postgres-0
+metadata:
+  name: postgres
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels: {app: postgres}
+  template:
+    metadata:
+      labels: {app: postgres}
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17     # đừng dùng 18: đổi đường dẫn data
+          ports:
+            - {name: pg, containerPort: 5432}
+          envFrom:
+            - secretRef: {name: postgres-auth}   # POSTGRES_USER / POSTGRES_PASSWORD
+          env:
+            - name: PGDATA                       # thư mục con, tránh lỗi "directory not empty"
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/postgresql/data}
+          readinessProbe:                        # chỉ nhận traffic khi DB nhận kết nối
+            exec:
+              command: [sh, -c, 'pg_isready -U "$POSTGRES_USER"']
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits:   {memory: 512Mi}
+  volumeClaimTemplates:          # k8s tự tạo PVC data-postgres-0
+    - metadata: {name: data}
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: local-path
+        resources:
+          requests: {storage: 5Gi}
