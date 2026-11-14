@@ -20,6 +20,19 @@ spec:
           resources:
             requests: {cpu: 500m, memory: 1Gi}
             limits:   {memory: 2Gi}
+          JCasC:
+            configScripts:
+              shared-lib: |
+                unclassified:
+                  globalLibraries:
+                    libraries:
+                      - name: lab-lib
+                        defaultVersion: main
+                        retriever:
+                          modernSCM:
+                            scm:
+                              git:
+                                remote: https://github.com/duy275/lab-jenkins-lib.git
           admin:
             existingSecret: jenkins-admin
             userKey: jenkins-admin-user
