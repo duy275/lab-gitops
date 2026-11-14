@@ -28,6 +28,31 @@ spec:
             limits:   {memory: 2Gi}
           JCasC:
             configScripts:
+              github: |
+                credentials:
+                  system:
+                    domainCredentials:
+                      - credentials:
+                          - usernamePassword:
+                              scope: GLOBAL
+                              id: github
+                              username: duy275
+                              password: ${github-token-token}
+                jobs:
+                  - script: >
+                      organizationFolder('lab-apps') {
+                        organizations {
+                          github {
+                            repoOwner('duy275')
+                            credentialsId('github')
+                            traits {
+                              sourceWildcardFilter { includes('lab-app-*'); excludes('') }
+                              gitHubBranchDiscovery { strategyId(1) }
+                            }
+                          }
+                        }
+                        triggers { periodicFolderTrigger { interval('1d') } }
+                      }
               shared-lib: |
                 unclassified:
                   globalLibraries:
