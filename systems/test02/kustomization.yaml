@@ -1,0 +1,7 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+images:
+  - name: ghcr.io/duy275/test02
+    newTag: initial
