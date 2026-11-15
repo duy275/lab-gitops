@@ -17,7 +17,7 @@ spec:
       - name: backstage
         image: ghcr.io/duy275/backstage
         command: ["node"]                 # bỏ qua docker-entrypoint.sh (sh làm rơi env có dấu -)
-          args: ["packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
+        args: ["packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
         ports:
         - name: http
           containerPort: 7007
