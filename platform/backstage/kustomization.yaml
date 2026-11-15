@@ -4,4 +4,4 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/duy275/backstage
-    newTag: 4147bad          # Jenkins (lab-backstage) sẽ sửa dòng này ở bước Update GitOps
+    newTag: 053df69
