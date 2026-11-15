@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test02
+spec:
+  selector: {app: test02}            # tìm pod theo label
+  ports:
+    - port: 80
+      targetPort: 8080
