@@ -41,6 +41,8 @@ spec:
         # Trước khi mở ra internet phải thay bằng GitHub login.
         - name: APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment
           value: "true"
+        - name: APP_CONFIG_backend_csp_upgrade-insecure-requests
+          value: "false"
         resources:
           requests: { cpu: 200m, memory: 512Mi }
           limits: { memory: 1536Mi }
