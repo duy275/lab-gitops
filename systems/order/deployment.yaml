@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: order}        # Deployment quản lý pod có label này
+  template:
+    metadata:
+      labels: {app: order}
+    spec:
+      containers:
+        - name: order
+          image: ghcr.io/duy275/order   # tag = SHA; sau này Jenkins sẽ tự sửa dòng này
+          ports:
+            - containerPort: 8080
+          readinessProbe:                       # sẵn sàng nhận traffic chưa
+            httpGet: {path: /actuator/health, port: 8080}
+            initialDelaySeconds: 10
+          livenessProbe:                        # còn sống không, chết thì restart
+            httpGet: {path: /actuator/health, port: 8080}
+            initialDelaySeconds: 30
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {memory: 512Mi}

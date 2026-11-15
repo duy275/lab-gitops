@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: order
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: order.hoanqdy.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: {name: order, port: {number: 80}}
