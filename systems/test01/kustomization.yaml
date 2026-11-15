@@ -4,4 +4,4 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/duy275/test01
-    newTag: da80283
+    newTag: 5fbdf10
