@@ -36,9 +36,10 @@ spec:
           valueFrom: { secretKeyRef: { name: backstage-secrets, key: GITHUB_TOKEN } }
         # --- Ghi đè config lúc chạy, không cần build lại image (APP_CONFIG_<đường_dẫn>) ---
         - name: APP_CONFIG_app_baseUrl
-          value: http://backstage.192.168.1.230.nip.io
+        - name: APP_CONFIG_app_baseUrl
+          value: http://localhost:7007
         - name: APP_CONFIG_backend_baseUrl
-          value: http://backstage.192.168.1.230.nip.io
+          value: http://localhost:7007
         # Guest login bị tắt ở production mặc định. Bật tạm cho lab vì chỉ truy cập nội bộ (Tailscale).
         # Trước khi mở ra internet phải thay bằng GitHub login.
         - name: APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment
