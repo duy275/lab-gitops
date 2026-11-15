@@ -4,4 +4,4 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/duy275/order
-    newTag: initial
+    newTag: 94b1166
