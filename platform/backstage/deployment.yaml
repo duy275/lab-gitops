@@ -1,0 +1,56 @@
+# Backstage (frontend + backend trong 1 container; app-backend phục vụ luôn giao diện).
+# Image do Jenkins build từ repo lab-backstage. Tag do kustomization.yaml quản.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+  labels: { app: backstage }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: backstage }
+  template:
+    metadata:
+      labels: { app: backstage }
+    spec:
+      containers:
+      - name: backstage
+        image: ghcr.io/duy275/backstage
+        ports:
+        - name: http
+          containerPort: 7007
+        env:
+        # --- Database: app-config.production.yaml đọc 4 biến này ---
+        - name: POSTGRES_HOST
+          value: postgres                     # Service postgres cùng namespace backstage
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_USER
+          valueFrom: { secretKeyRef: { name: postgres-auth, key: POSTGRES_USER } }
+        - name: POSTGRES_PASSWORD
+          valueFrom: { secretKeyRef: { name: postgres-auth, key: POSTGRES_PASSWORD } }
+        # --- GitHub: integrations.github[0].token = ${GITHUB_TOKEN} (token backstage-lab) ---
+        - name: GITHUB_TOKEN
+          valueFrom: { secretKeyRef: { name: backstage-secrets, key: GITHUB_TOKEN } }
+        # --- Ghi đè config lúc chạy, không cần build lại image (APP_CONFIG_<đường_dẫn>) ---
+        - name: APP_CONFIG_app_baseUrl
+          value: http://backstage.192.168.1.230.nip.io
+        - name: APP_CONFIG_backend_baseUrl
+          value: http://backstage.192.168.1.230.nip.io
+        # Guest login bị tắt ở production mặc định. Bật tạm cho lab vì chỉ truy cập nội bộ (Tailscale).
+        # Trước khi mở ra internet phải thay bằng GitHub login.
+        - name: APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment
+          value: "true"
+        resources:
+          requests: { cpu: 200m, memory: 512Mi }
+          limits: { memory: 1536Mi }
+        startupProbe:                         # lần đầu chạy migration DB, có thể mất 1-2 phút
+          httpGet: { path: /.backstage/health/v1/liveness, port: http }
+          periodSeconds: 10
+          failureThreshold: 30
+        readinessProbe:
+          httpGet: { path: /.backstage/health/v1/readiness, port: http }
+          periodSeconds: 10
+        livenessProbe:
+          httpGet: { path: /.backstage/health/v1/liveness, port: http }
+          periodSeconds: 20
