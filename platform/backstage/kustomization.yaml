@@ -4,4 +4,4 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/duy275/backstage
-    newTag: 2cfd46e
+    newTag: 0ab4f46
