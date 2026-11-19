@@ -36,16 +36,13 @@ spec:
           valueFrom: { secretKeyRef: { name: backstage-secrets, key: GITHUB_TOKEN } }
         # --- Ghi đè config lúc chạy, không cần build lại image (APP_CONFIG_<đường_dẫn>) ---
         - name: APP_CONFIG_app_baseUrl
-        - name: APP_CONFIG_app_baseUrl
-          value: http://localhost:7007
+          value: https://backstage.hoanqdy.cloud
         - name: APP_CONFIG_backend_baseUrl
-          value: http://localhost:7007
+          value: https://backstage.hoanqdy.cloud
         # Guest login bị tắt ở production mặc định. Bật tạm cho lab vì chỉ truy cập nội bộ (Tailscale).
         # Trước khi mở ra internet phải thay bằng GitHub login.
         - name: APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment
           value: "true"
-        - name: APP_CONFIG_backend_csp_upgrade-insecure-requests
-          value: "false"
         resources:
           requests: { cpu: 200m, memory: 512Mi }
           limits: { memory: 1536Mi }
